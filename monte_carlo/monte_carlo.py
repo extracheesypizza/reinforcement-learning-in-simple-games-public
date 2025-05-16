@@ -1,4 +1,5 @@
 from collections import defaultdict
+from functions import test_policy
 import gymnasium as gym
 from tqdm import tqdm
 import numpy as np
@@ -72,8 +73,14 @@ class MonteCarloES:
                 # updating the policy to be greedy with respect to Q
                 self.policy[state] = np.argmax(self.Q[state])
     
-    def train_agent(self, num_episodes=10000):
+    def train_agent(self, num_episodes=10000, test_vars=None):
         """Training the agent using Monte Carlo ES"""
-        for _ in tqdm(range(num_episodes), desc="Training"):
+        scores = []
+        for n_episode in tqdm(range(num_episodes), desc="Training"):
             episode = self.generate_episode(exploring_starts=True)
             self.train_episode(episode)
+            if test_vars:
+                if n_episode % test_vars[0] == 0:
+                    scores.append(test_policy(self, self.env, test_vars[1]))
+        return scores
+

@@ -1,8 +1,8 @@
-import numpy as np
+from functions import create_state_space, test_policy
+from gymnasium.spaces import Tuple, Discrete
 import gymnasium as gym
 from tqdm import tqdm
-from gymnasium.spaces import Tuple, Discrete
-from functions import create_state_space
+import numpy as np
 
 class MonteCarloOffPolicy:
     def __init__(self, env, gamma=1.0, epsilon=0.1):
@@ -95,11 +95,16 @@ class MonteCarloOffPolicy:
             if W < 1e-10:  # early exitting to prevent numerical issues
                 break
 
-    def train_agent(self, n_episodes):
-        """Training with epsilon decay and progress tracking"""
-        for _ in tqdm(range(n_episodes), desc="Training"):
+    def train_agent(self, num_episodes=10000, test_vars=None):
+        """Training the agent using Monte Carlo ES"""
+        scores = []
+        for n_episode in tqdm(range(num_episodes), desc="Training"):
             episode = self.generate_episode()
             self.train_episode(episode)
+            if test_vars:
+                if n_episode % test_vars[0] == 0:
+                    scores.append(test_policy(self, self.env, test_vars[1]))
+        return scores
             
 
     def test(self, n_episodes=100):

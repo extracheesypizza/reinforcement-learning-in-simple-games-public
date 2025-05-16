@@ -58,7 +58,7 @@ def test_policy(agent, env, num_episodes):
         truncated = False
         
         while not (done or truncated):
-            action = agent.policy[state]
+            action = int(agent.policy[state])
             state, reward, done, truncated, _ = env.step(action)
             
         total_rewards += reward

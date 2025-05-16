@@ -1,5 +1,6 @@
 from gymnasium.spaces import Tuple, Discrete
 from collections import defaultdict
+from functions import test_policy
 import gymnasium as gym
 from tqdm import tqdm
 import numpy as np
@@ -52,10 +53,16 @@ class MonteCarloAlpha:
             self.Q[(state, action)] += self.alpha * (G - current_q)
             self.policy[state] = np.argmax([self.Q[(state, action)] for action in range(self.n_actions)])
 
-    def train_agent(self, n_episodes):
-        for _ in tqdm(range(n_episodes), desc="Training"):
+    def train_agent(self, num_episodes=10000, test_vars=None):
+        """Training the agent using Monte Carlo ES"""
+        scores = []
+        for n_episode in tqdm(range(num_episodes), desc="Training"):
             episode = self.generate_episode()
             self.train_episode(episode)
+            if test_vars:
+                if n_episode % test_vars[0] == 0:
+                    scores.append(test_policy(self, self.env, test_vars[1]))
+        return scores
 
     def test_episode(self, render=False):
         original_epsilon = self.epsilon
