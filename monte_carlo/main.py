@@ -9,13 +9,14 @@ test_vars = None # [100, 50_000]
 if __name__ == "__main__":
     # creating the Blackjack environment
     env = gym.make('Blackjack-v1', sab=True)
+    # env = gym.make('FrozenLake-v1', map_name="8x8", is_slippery=True)
 
     mc_agent = MonteCarloES(env, gamma=1.0)
-    mc_results = mc_agent.train_agent(num_episodes=150_001, test_vars=test_vars)
+    mc_results = mc_agent.train_agent(num_episodes=50_001, test_vars=test_vars)
 
     if test_vars:
         file_directory = os.path.split(os.path.realpath(__file__))[0]
         np.savetxt('mc_results.txt', np.array(mc_results), delimiter=' ', fmt='%f')
     else:
-        test_policy(mc_agent, env, 100_000) # may take some time
-        plot_blackjack_policy(mc_agent)
+        test_policy(mc_agent, env, 1_000) # may take some time
+        # plot_blackjack_policy(mc_agent)

@@ -1,5 +1,7 @@
 # Reinforcement Learning in Simple Games
 
+![](resources/preview.gif)
+
 ## Introduction
 
 This GitHub repository is accompanying the corresponding thesis paper, which can be accessed via the `report.pdf` file. The report goes through basics of Reinforcement Learning, theory behind some of the RL algorithms and describes the implementation details of the algorithms found in this repository.
@@ -8,7 +10,7 @@ This GitHub repository is accompanying the corresponding thesis paper, which can
 ## How to run?
 1. Download the repository
 2. Create and launch a virtual environment:
-    - For windows systems: `python -m rl_env env && .\rl_env\Scripts\activate`
+    - For Windows systems: `python -m rl_env env && .\rl_env\Scripts\activate`
     - For UNIX systems: `python -m rl_env env && source ./rl_env/bin/activate`
 3. Install dependencies:
     - `pip install -r requirements.txt`
@@ -27,4 +29,4 @@ Here is the list of algorithms available in this repository. For more detail ple
 ### DQN
 - `/dqn/` directory contains the implementation of the Deep Q-Network, which learns to play Atari games 
 
-Each folder contains a `main.py` file which contains the training/evaluation loop, feel free to play around with them.
+Each folder contains a `main.py` file which contains the training/evaluation loop, feel free to explore and play around with them.

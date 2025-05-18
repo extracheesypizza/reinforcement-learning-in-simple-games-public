@@ -1,7 +1,10 @@
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 
+matplotlib.rcParams['mathtext.fontset'] = 'stix'
+matplotlib.rcParams['font.family'] = 'STIXGeneral'
 
 def plot_blackjack_policy(agent):
     """Visualizing the learned Blackjack policy"""
@@ -28,7 +31,7 @@ def plot_blackjack_policy(agent):
         ax = axes[ace_idx]
 
         cmap = ListedColormap(['#FF7F7F', '#7FFF7F'])
-        im = ax.imshow(policy_grid.T, cmap=cmap, origin='lower', aspect='auto', extent=[1 - 0.5, 10 + 0.5, 12 - 0.5, 21 + 0.5], vmin=0, vmax=1) 
+        im = ax.imshow(policy_grid.T, cmap=cmap, origin='lower', alpha=0.75, aspect='auto', extent=[1 - 0.5, 10 + 0.5, 12 - 0.5, 21 + 0.5], vmin=0, vmax=1) 
         ax.set_title(titles[ace_idx])
         ax.set_xlabel("Dealer showing")
         ax.set_ylabel("Player sum")
@@ -45,6 +48,7 @@ def plot_blackjack_policy(agent):
     title = "Blackjack Policy - Monte Carlo Constant Alpha"
     plt.suptitle(title, fontsize=16)
     plt.tight_layout()
+    # plt.savefig('mcca.svg', bbox_inches='tight', facecolor="#FFFFFF", transparent=True)
     plt.show()
 
 

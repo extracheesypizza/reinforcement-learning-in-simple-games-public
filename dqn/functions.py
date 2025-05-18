@@ -10,8 +10,8 @@ def make_pong_env(render=None):
     return env
 
 def make_breakout_env(render=None):
-    env = gym.make('Breakout-v4', frameskip=1, render_mode=render)  # creating base environment
-    env = gym.wrappers.AtariPreprocessing(env, noop_max=30, frame_skip=4, screen_size=84, grayscale_obs=True, scale_obs=True)
+    env = gym.make('Breakout-v4', frameskip=1, render_mode=render, mode=0, difficulty=0)  # creating base environment
+    env = gym.wrappers.AtariPreprocessing(env, noop_max=30, frame_skip=4, screen_size=84, grayscale_obs=True, scale_obs=True) # terminal_on_life_loss=True
     env = gym.wrappers.FrameStackObservation(env, 4)
     return env
 
@@ -31,14 +31,16 @@ def make_env(env_name, render=None):
     return 0
 
 # helper function used for testing the agent
-def test(model, env_name, num_episodes=5):
+def test(model, env_name, num_episodes=5, render='human'):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    env = make_env(env_name, render='human')
+    env = make_env(env_name, render=render)
 
     model = model.to(device)
     model.eval()
-    
+
+    results = []
+
     for episode in range(num_episodes):
         state, _ = env.reset()
         state = np.array(state)
@@ -55,8 +57,10 @@ def test(model, env_name, num_episodes=5):
             done = terminated or truncated
             state = np.array(next_state)
             total_reward += reward
-            env.render()
-        
+            if render:
+                env.render()
+
+        results.append(total_reward)
         print(f"Test Episode {episode+1}, Total Reward: {total_reward}")
-    
+    print(f"Average Total Reward: {np.mean(results)}")
     env.close()

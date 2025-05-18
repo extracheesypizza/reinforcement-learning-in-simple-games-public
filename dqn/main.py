@@ -8,6 +8,7 @@ import random
 import ale_py
 import os
 
+train_mode = False # True -> train a new model | False -> load the trained model from the file
 play_game = 'pong' # 'pong' / 'space_invaders' / 'breakout'
 
 # creating the gane environment
@@ -34,6 +35,7 @@ optimizer = torch.optim.RMSprop(
         momentum=0,         
         centered=False      # non-centered RMSprop [original version]
     )
+
 buffer = ReplayBuffer(100_000)
 
 # training hyperparameters
@@ -116,9 +118,7 @@ def train(episodes=10_000_000, save_interval=50, model_name='dqn_latest.pth'):
         # syncing target network
         if step % sync_target_freq == 0:
             target_model.load_state_dict(model.state_dict())
-        
-# True -> train a new model | False -> load the trained model from the file
-train_mode = False
+
 
 file_directory = os.path.split(os.path.realpath(__file__))[0]
 model_name_save = file_directory + f'/dqn_{play_game}_latest_model.pth'
@@ -131,4 +131,4 @@ if __name__ == "__main__":
     else: # loading and testing the trained model
         trained_model = DQN(input_shape, n_actions).to(device)
         trained_model.load_model(model_name_load, device)
-        test(trained_model, env_name=play_game, num_episodes=3)
+        test(trained_model, env_name=play_game, num_episodes=100, render='human')
